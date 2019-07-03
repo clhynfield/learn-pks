@@ -26,4 +26,29 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+## Test that services are enabled in project
+
+error=0
+
+for service in \
+    'iam.googleapis.com' \
+    'cloudresourcemanager.googleapis.com' \
+    'dns.googleapis.com' \
+    'sqladmin.googleapis.com' \
+    'sourcerepo.googleapis.com'
+do
+    if ! gcloud services list --enabled \
+        --project "$GCP_PROJECT_ID" \
+        --filter "name:('$service')" \
+        | grep "$service" \
+        >/dev/null 2>&1
+    then
+        error=1
+    fi
+done
+
+if [ $error -ne 0 ]; then
+    echo "FAILED: not all services are enabled in project" 2>&1
+    exit 1
+fi
 

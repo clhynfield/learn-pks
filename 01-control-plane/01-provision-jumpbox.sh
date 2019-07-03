@@ -42,3 +42,11 @@ if ! jumpbox_authorized; then
         --quiet \
         --command '/snap/bin/gcloud auth login --quiet'
 fi
+
+## Enable services in project
+
+gcloud services enable iam.googleapis.com --async
+gcloud services enable cloudresourcemanager.googleapis.com --async
+gcloud services enable dns.googleapis.com --async
+gcloud services enable sqladmin.googleapis.com --async
+gcloud services enable sourcerepo.googleapis.com --async
