@@ -11,6 +11,8 @@ jumpbox_exists() {
         >/dev/null 2>&1
 }
 
+## Create a jumpbox
+
 if ! jumpbox_exists; then
     gcloud compute instances create 'jbox-pks' \
         --image-project 'ubuntu-os-cloud' \
@@ -21,4 +23,12 @@ if ! jumpbox_exists; then
         --zone "$GCP_ZONE" \
         --tags "jbox-pks"
 fi
+
+## Configure the jumpbox
+
+gcloud compute ssh 'ubuntu@jbox-pks' \
+    --project "$GCP_PROJECT_ID" \
+    --zone "$GCP_ZONE" \
+    --quiet \
+    --command '/snap/bin/gcloud auth login --quiet'
 
