@@ -22,3 +22,7 @@ as_root apt update && as_root apt install google-cloud-sdk
 
 gcloud init
 
+## LastPass
+
+as_root apt install lastpass-cli
+
