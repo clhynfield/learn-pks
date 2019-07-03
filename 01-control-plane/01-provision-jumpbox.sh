@@ -26,9 +26,19 @@ fi
 
 ## Configure the jumpbox
 
-gcloud compute ssh 'ubuntu@jbox-pks' \
-    --project "$GCP_PROJECT_ID" \
-    --zone "$GCP_ZONE" \
-    --quiet \
-    --command '/snap/bin/gcloud auth login --quiet'
+jumpbox_authorized() {
+    gcloud compute ssh 'ubuntu@jbox-pks' \
+        --project "$GCP_PROJECT_ID" \
+        --zone "$GCP_ZONE" \
+        --quiet \
+        --command '/snap/bin/gcloud auth print-identity-token' \
+        >/dev/null 2>&1
+}
 
+if ! jumpbox_authorized; then
+    gcloud compute ssh 'ubuntu@jbox-pks' \
+        --project "$GCP_PROJECT_ID" \
+        --zone "$GCP_ZONE" \
+        --quiet \
+        --command '/snap/bin/gcloud auth login --quiet'
+fi
